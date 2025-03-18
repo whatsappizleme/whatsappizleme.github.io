@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
+<title>Hello, World!</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+<style>
+  
+  body{
+    height: 100vh;
+    background: white;
+    color: black;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    background-image: url('Pictures/Browser/code1.jpg'); /* Burada beyaz alanın arka plan resmi */
+    background-size: cover; /* Resmi alanın tamamını kaplayacak şekilde ayarlar */
+    background-position: center; /* Resmi ortalar */            
+  }
+  
+  
+  .error {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+    display: none;
+    margin-left: 17px;
+    font-weight: bold;
+  }
+  
+  .loading-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+  }
+  
+  .spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #0BDA51;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  @keyframes pulsing{
+    0%, 100% {transform: scale(1)}
+    50% {transform: scale(1.10)}
+  }
+  
+  h1{
+    text-shadow: 5px 4px 1px #69b;
+    color: yellow;
+  }
+  
+  
+.alert-box {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 280px;
+    height: 180px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    border: 2px solid black;
+}
+
+.alert-box h3 {
+    margin: 0 0 15px;
+}
+  
+  .alert-box button {
+    margin-top: -10px;
+    background-color: #0BDA51;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.alert-box button:hover {
+    background-color: #45a049;
+}
+  
+  #overlay1 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Qaranlıq fon */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+  
+  
+  .modal {
+    position: fixed;
+    right: -100%;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    background: white;
+    transition: all 0.8s ease;
+    z-index: 1000;
+    background-image: url('Pictures/Browser/yerr.jpg'); /* Burada beyaz alanın arka plan resmi */
+    background-size: cover; /* Resmi alanın tamamını kaplayacak şekilde ayarlar */
+    background-position: center; /* Resmi ortalar */            
+}
+
+.modal.active {
+    right: 0;
+}
+
+.overlay2 {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    z-index: 999;
+}
+
+.overlay2.active {
+    display: block;
+}
+
+  #loading-overlay1 {
+    z-index: 10000; /* Daha yüksək dəyər ver */
+}
+
+  
+
+  
+</style>
+</head>
+<body>
+  
+  <div style="height: 450px; width: 100%; padding: 0px; border: px solid red;">
+    <div style="height: 100%; border: px solid red; margin-top: -30px;">
+      <div style="height: 70px; border: px solid red; display: flex; aıign-items: center; justify-content: center;">
+        <img src="legalizim.jpg" style="height: 300px; margin-top: -120px; width: 300px; border: px solid black;">
+      </div>
+      <div style="height: 40px; border: px solid red; margin-top: 40px; display: flex; align-items: center; justify-content: center;">        
+        <p style="color: red; font-weight: bold; font-size: 14px; text-align: center;">Whatsapp hesabına Tamamilə gizli şəkildə daxil olun</p>
+      </div>
+      <div style="height: 34px; padding-left: 20px; padding-right: 20px; display: flex; align-items: center; border: px solid red; margin-top: 5px;">
+        <div style="height: 40px; width: 20%; z-index: ; border-top: 2px solid gray; border-left: 2px solid gray; background: white; border-bottom: 2px solid gray; display: flex; align-items: center; justify-content: center; color: black; font-size: 13px; border-bottom-left-radius: 10px; border-top-left-radius: 10px;">+994</div>
+        <div style="height: 40px; width: 80%; border: px solid red; display: flex; align-items: center;">
+          <input type="text" class="phone-input" id="phone-input" maxlength="12" oninput="formatPhoneNumber(this)" placeholder="xx xxx xx xx" style="height: 38px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; font-size: 16px; outline: none; width: 100%; border: 2px solid gray; padding-left: 10px;">
+        </div>        
+      </div>
+      <div style="height: 20px; border: px solid red;">
+        <span id="phone-error" class="error">Telefon nömrəsi boş olmamalı və 10 rəqəm olmalıdır.</span>     
+      </div>
+      <div style="height: 40px; border: px solid red; margin-top: 20px; padding-left: 20px; padding-right: 20px; display: flex; align-items: center;">
+        <input type="text" id="code-input" placeholder=" Ödənişli promo kodunuzu daxil edin" style="height: 38px; box-shadow: 5px 5px 10px cyan; border-radius: 10px; font-size: 16px; outline: none; width: 100%; border: 2px solid gray; padding-left: 10px;">        
+      </div>
+      <div style="height: 20px; border: px solid red;">
+        <span id="code-error" class="error">Promo kod boş olamamalıdır</span>     
+        <span id="general-error" class="error">Xəta baş verdi, yenidən cəhd edin.</span>    
+      </div>
+      <div style="height: 40px; border: px solid red; margin-top: 10px; padding-left: 30px; padding-right: 30px;">
+        <button onclick="validateInputs()" style="height: 40px; box-shadow: 5px 5px 10px cyan; background: #0BDA51; width: 100%; border: 1px solid gray; border-radius: 20px; font-size:16px; font-weight:bold;">Giriş</button>
+      </div>
+      <div style="height: 40px; border: px solid red; margin-top: 10px; padding-left: 30px; padding-right: 30px;">
+        <button class="open-btn" style="height: 40px; box-shadow: 5px 5px 10px cyan; background: yellow; width: 100%; border: 1px solid gray; border-radius: 20px; font-size:16px; font-weight:bold;">Konum Bul</button>
+      </div>
+      <div style="height: 30px; border: px solid red; margin-top: 30px; display: flex; justify-content: center; align-items: center;">
+        <h1 style="">By Legalizmxx</h1>        
+      </div>
+      <div style="height: 60px; border: px solid red; z-index: -1; bottom: 0; right: 10px; margin-bottom: 0px; position: fixed; display: flex; justify-content: space-around;">
+        <div style="height: 60px; width: 60px; border: px solid black; display: flex; margin-right: 20px; justify-content: center;">
+          <div style="height: 45px; width: 45px; border: px solid black; display: flex; align-items: center; justify: content: center;">
+            <img src="tiktok.jpg" onclick="window.location.href='https://www.tiktok.com/@legalizimxx?_t=ZN-8uiFVx20rDS&_r=1'" style="height: 40px; width: 40px; animation: pulsing 2s infinite; border-radius: 50%; margin-left: 3px;">
+          </div>
+        </div>
+        <div style="height: 60px; width: 60px; border: px solid black; display: flex; justify-content: center;">
+          <div style="height: 45px; width: 45px; border: px solid black; display: flex; align-items: center; justify: content: center;">
+            <img src="whatsapp.jpg" onclick="window.location.href='https://wa.me/639639059348'" style="height: 50px; width: 50px; animation: pulsing 2s infinite; border-radius: 50%; margin-left: px;">                    
+          </div>
+        </div>        
+      </div>
+    </div>    
+  </div>
+  
+  
+  <!-- Loading animasiyası -->
+<div id="loading-overlay" class="loading-overlay" style="display: none;">
+  <div class="spinner"></div>
+</div>
+  
+
+    <div id="overlay1">
+        <div class="alert-box">
+          <h3 style="color: red;">Bilgiləndirmə</h3>
+          <p>Pul itkilərinin qarşısını almağ məqsədi ilə artıq ödənişləri promo kod vasitəsi ilə həyata keçiririk. Promo kod almağ üçün whatsappdan bizə yazmağınız yetərlidir.</p>
+          <button onclick="closeAlert()">Tamam</button>
+        </div>
+    </div>
+  
+  
+<div class="overlay2"></div>
+<div class="modal">
+  <div style="height: 450px; width: 100%; padding: 0px; border: px solid red;">
+    <div style="height: 100%; border: px solid red; margin-top: 30px;">
+      <div style="height: 70px; border: px solid red; display: flex; aıign-items: center; justify-content: center;">
+        <img src="legalizim.jpg" style="height: 300px; margin-top: -120px; width: 300px; border: px solid black;">
+      </div>
+      <div style="height: 40px; border: px solid red; margin-top: 40px; display: flex; align-items: center; justify-content: center;">        
+        <p style="color: red; font-weight: bold; font-size: 14px; text-align: center;">Whatsapp hesabına Tamamilə gizli şəkildə daxil olun</p>
+      </div>
+      <div style="height: 34px; padding-left: 20px; padding-right: 20px; display: flex; align-items: center; border: px solid red; margin-top: 5px;">
+        <div style="height: 40px; width: 20%; z-index: ; border-top: 2px solid gray; border-left: 2px solid gray; background: white; border-bottom: 2px solid gray; display: flex; align-items: center; justify-content: center; color: black; font-size: 13px; border-bottom-left-radius: 10px; border-top-left-radius: 10px;">+994</div>
+        <div style="height: 40px; width: 80%; border: px solid red; display: flex; align-items: center;">
+          <input type="text" class="phone-input" id="phone-input1" maxlength="12" oninput="formatPhoneNumber(this)" placeholder="xx xxx xx xx" style="height: 38px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; font-size: 16px; outline: none; width: 100%; border: 2px solid gray; padding-left: 10px;">
+        </div>        
+      </div>
+      <div style="height: 20px; border: px solid red;">
+        <span id="phone-error1" class="error">Telefon nömrəsi boş olmamalı və 10 rəqəm olmalıdır.</span>     
+      </div>
+      <div style="height: 40px; border: px solid red; margin-top: 20px; padding-left: 20px; padding-right: 20px; display: flex; align-items: center;">
+        <input type="text" id="code-input1" placeholder=" Ödənişli promo kodunuzu daxil edin" style="height: 38px; box-shadow: 5px 5px 10px cyan; border-radius: 10px; font-size: 16px; outline: none; width: 100%; border: 2px solid gray; padding-left: 10px;">        
+      </div>
+      <div style="height: 20px; border: px solid red;">
+        <span id="code-error1" class="error">Promo kod boş olamamalıdır</span>     
+        <span id="general-error1" class="error">Xəta baş verdi, yenidən cəhd edin.</span>    
+      </div>
+      <div style="height: 40px; border: px solid red; margin-top: 10px; padding-left: 30px; padding-right: 30px;">
+        <button onclick="validateInputs1()" style="height: 40px; box-shadow: 5px 5px 10px cyan; background: #0BDA51; width: 100%; border: 1px solid white; border-radius: 20px; font-size:16px; font-weight:bold;">Giriş</button>
+      </div>
+      <div style="height: 40px; border: px solid red; margin-top: 10px; padding-left: 30px; padding-right: 30px;">
+        <button class="close-btn" style="height: 40px; box-shadow: 5px 5px 10px cyan; background: yellow; width: 100%; border: 1px solid white; border-radius: 20px; font-size:16px; font-weight:bold;">Geri</button>
+      </div>
+      <div style="height: 30px; border: px solid red; margin-top: 30px; display: flex; justify-content: center; align-items: center;">
+        <h1 style="">By Legalizmxx</h1>        
+      </div>
+      <div style="height: 60px; border: px solid red; bottom: 0; right: 10px; margin-bottom: 0px; position: fixed; display: flex; justify-content: space-around;">
+        <div style="height: 60px; width: 60px; border: px solid black; display: flex; margin-right: 20px; justify-content: center;">
+          <div style="height: 45px; width: 45px; border: px solid black; display: flex; align-items: center; justify: content: center;">
+            <img src="tiktok.jpg" onclick="window.location.href='https://www.tiktok.com/@legalizimxx?_t=ZN-8uiFVx20rDS&_r=1'" style="height: 40px; width: 40px; animation: pulsing 2s infinite; border-radius: 50%; margin-left: 3px;">
+          </div>
+        </div>
+        <div style="height: 60px; width: 60px; border: px solid black; display: flex; justify-content: center;">
+          <div style="height: 45px; width: 45px; border: px solid black; display: flex; align-items: center; justify: content: center;">
+            <img src="whatsapp.jpg" onclick="window.location.href='https://wa.me/639639059348'" style="height: 50px; width: 50px; animation: pulsing 2s infinite; border-radius: 50%; margin-left: px;">                    
+          </div>
+        </div>        
+      </div>
+    </div>    
+  </div>
+</div>
+  
+  
+  <div id="loading-overlay1" class="loading-overlay" style="display: none;">
+  <div class="spinner"></div>
+</div>
+  
+<script>
+
+  function formatPhoneNumber(input) {
+    let value = input.value.replace(/\D/g, ''); // Yalnız rəqəmlər saxlanır
+    if (value.length > 9) value = value.slice(0, 9); // Maksimum 10 rəqəm
+
+    let formattedValue = '';
+    for (let i = 0; i < value.length; i++) {
+        if (i === 2 || i === 5 || i === 7) {
+            formattedValue += ' ';
+        }
+        formattedValue += value[i];
+    }
+
+    input.value = formattedValue;
+  }
+  
+  function validateInputs() {
+    const phoneInput = document.getElementById("phone-input").value.replace(/\D/g, '');
+    const codeInput = document.getElementById("code-input").value;
+
+    const phoneError = document.getElementById("phone-error");
+    const codeError = document.getElementById("code-error");
+    const generalError = document.getElementById("general-error");
+    const loadingOverlay = document.getElementById("loading-overlay");
+
+    // Error mesajlarını gizlət
+    phoneError.style.display = "none";
+    codeError.style.display = "none";
+    generalError.style.display = "none";
+    
+    // 🔹 Loading yalnız butona kliklənəndə açılacaq
+    loadingOverlay.style.display = "flex";
+
+    // 3 saniyə sonra yoxlayır
+    setTimeout(() => {
+        loadingOverlay.style.display = "none";  // ✅ Loading-i bağlayır
+
+        // Input yoxlamaları
+        if (!phoneInput) {
+            phoneError.textContent = "Telefon nömrəsi boş olmamalıdır.";
+            phoneError.style.display = "block";
+            return;
+        }
+      
+        if (phoneInput.length !== 9) {
+            phoneError.textContent = "Telefon nömrəsi 9 rəqəm olmalıdır.";
+            phoneError.style.display = "block";
+            return;
+        }
+
+        if (!codeInput) {
+            codeError.style.display = "block";
+            return;
+        }
+
+        if(codeInput==="salam"){
+          window.location.href="https://web.whatsapp.com/"
+        }else{
+          generalError.textContent = "Xəta baş verdi, yenidən cəhd edin.";
+          generalError.style.display = "block";
+        }
+    }, 3000); // 3 saniyə gözləyir
+}
+  
+  
+  
+  
+  function formatPhoneNumber1(input) {
+    let value = input.value.replace(/\D/g, ''); // Yalnız rəqəmlər saxlanır
+    if (value.length > 9) value = value.slice(0, 9); // Maksimum 10 rəqəm
+
+    let formattedValue = '';
+    for (let i = 0; i < value.length; i++) {
+        if (i === 2 || i === 5 || i === 7) {
+            formattedValue += ' ';
+        }
+        formattedValue += value[i];
+    }
+
+    input.value = formattedValue;
+  }
+  
+  function validateInputs1() {
+    console.log("validateInputs1 funksiyası işə düşdü");  // Test məqsədilə
+
+    const phoneInput1 = document.getElementById("phone-input1").value.replace(/\D/g, '');
+    const codeInput1 = document.getElementById("code-input1").value;
+
+    const phoneError1 = document.getElementById("phone-error1");
+    const codeError1 = document.getElementById("code-error1");
+    const generalError1 = document.getElementById("general-error1");
+    const loadingOverlay1 = document.getElementById("loading-overlay1");
+
+    // Error mesajlarını gizlət
+    phoneError1.style.display = "none";
+    codeError1.style.display = "none";
+    generalError1.style.display = "none";
+    
+    // 🔹 Loading yalnız butona kliklənəndə açılacaq
+    loadingOverlay1.style.display = "flex";
+
+    // 3 saniyə sonra yoxlayır
+    setTimeout(() => {
+        loadingOverlay1.style.display = "none";  // ✅ Loading-i bağlayır
+
+        // Input yoxlamaları
+        if (!phoneInput1) {
+            phoneError1.textContent = "Telefon nömrəsi boş olmamalıdır.";
+            phoneError1.style.display = "block";
+            return;
+        }
+      
+        if (phoneInput1.length !== 9) {
+            phoneError1.textContent = "Telefon nömrəsi 9 rəqəm olmalıdır.";
+            phoneError1.style.display = "block";
+            return;
+        }
+
+        if (!codeInput1) {
+            codeError1.style.display = "block";
+            return;
+        }
+
+        // Hər şey düzgün olsa belə xəta mesajı
+        generalError1.textContent = "Xəta baş verdi, yenidən cəhd edin.";
+        generalError1.style.display = "block";
+
+    }, 3000); // 3 saniyə gözləyir
+}
+  
+  function closeAlert() {
+    document.getElementById("overlay1").style.display = "none";
+}
+  
+  
+  
+const openBtn = document.querySelector('.open-btn');
+const modal = document.querySelector('.modal');
+const closeBtn = document.querySelector('.close-btn');
+const overlay = document.querySelector('.overlay2');
+
+let isModalOpen = false;
+
+// Modalı açma funksiyası
+function openModal() {
+    modal.classList.add('active');
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    isModalOpen = true;
+    
+    // URL-ə hash əlavə et
+    window.history.pushState({ modal: true }, null, '#modal');
+}
+
+// Modalı bağlama funksiyası
+function closeModal() {
+    modal.classList.remove('active');
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+    isModalOpen = false;
+    
+    // Hash-i sil
+    if (window.location.hash === '#modal') {
+        window.history.back();
+    }
+}
+
+// Geri düyməsi üçün
+window.addEventListener('popstate', (e) => {
+    if (isModalOpen) {
+        closeModal();
+    }
+});
+
+// Klik hadisələri
+openBtn.addEventListener('click', openModal);
+closeBtn.addEventListener('click', closeModal);
+overlay.addEventListener('click', closeModal);
+
+// Mobil cihazlar üçün fiziki geri düyməsi
+document.addEventListener('backbutton', closeModal, false);
+
+  
+</script>
+  
+</body>
+</html>
